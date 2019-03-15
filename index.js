@@ -51,9 +51,9 @@ exports.deserialize = json => {
   }
 
   if (Array.isArray(json.data)) {
-    return parseResource(flatResources, json.data)
-  } else {
     return json.data
       .map(resource => parseResource(flatResources, resource))
+  } else {
+    return parseResource(flatResources, json.data)
   }
 }
