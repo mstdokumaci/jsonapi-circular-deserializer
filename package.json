@@ -1,0 +1,36 @@
+{
+  "name": "jsonapi-circular-deserializer",
+  "version": "0.0.1",
+  "description": "memory optimized json api deserializer",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mstdokumaci/jsonapi-circular-deserializer"
+  },
+  "author": "Mustafa Dokumacı <mustafa@foraa.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mstdokumaci/jsonapi-circular-deserializer/issues"
+  },
+  "homepage": "https://mstdokumaci.github.io/jsonapi-circular-deserializer",
+  "keywords": [
+    "jsonapi",
+    "circular",
+    "deserializer"
+  ],
+  "contributors": [
+    "Mustafa Dokumacı <mustafa@foraa.com>"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "istanbul": "0.4.5",
+    "nodemon": "^1.18.7",
+    "standard": "^12.0.0",
+    "tap-difflet": "0.7.1",
+    "tape": "^4.9.1"
+  }
+}
