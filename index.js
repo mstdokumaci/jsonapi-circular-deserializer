@@ -1,8 +1,4 @@
-const getFirstIfSingleItemList = list => list.length === 1
-  ? list[0]
-  : list
-
-const addToFlatResources = (flatResources, resource) => {
+const initializeResource = (flatResources, resource) => {
   if (!flatResources[resource['type']]) {
     flatResources[resource['type']] = {}
   }
@@ -12,36 +8,38 @@ const addToFlatResources = (flatResources, resource) => {
     }
   }
 
+  return flatResources[resource['type']][resource['id']]
+}
+
+const parseRelationship = (flatResources, relationship) => {
+  if (Array.isArray(relationship)) {
+    return relationship
+      .map(resource => initializeResource(flatResources, resource))
+  } else if (relationship) {
+    return initializeResource(flatResources, relationship)
+  } else {
+    return relationship
+  }
+}
+
+const parseResource = (flatResources, resource) => {
+  const flatResource = initializeResource(flatResources, resource)
+
   if (resource.relationships) {
     for (let name in resource.relationships) {
-      const relationships = [].concat(resource.relationships[name].data).map(resource => {
-        if (!resource) {
-          return resource
-        }
-
-        if (!flatResources[resource['type']]) {
-          flatResources[resource['type']] = {}
-        }
-        if (!flatResources[resource['type']][resource['id']]) {
-          flatResources[resource['type']][resource['id']] = {
-            id: resource['id']
-          }
-        }
-
-        return flatResources[resource['type']][resource['id']]
-      })
-
-      flatResources[resource['type']][resource['id']][name] = getFirstIfSingleItemList(relationships)
+      flatResource[name] = parseRelationship(
+        flatResources, resource.relationships[name].data
+      )
     }
   }
 
   if (resource.attributes) {
     for (let name in resource.attributes) {
-      flatResources[resource['type']][resource['id']][name] = resource.attributes[name]
+      flatResource[name] = resource.attributes[name]
     }
   }
 
-  return flatResources[resource['type']][resource['id']]
+  return flatResource
 }
 
 exports.deserialize = json => {
@@ -49,12 +47,13 @@ exports.deserialize = json => {
 
   if (json.included) {
     json.included
-      .forEach(resource => addToFlatResources(flatResources, resource))
+      .forEach(resource => parseResource(flatResources, resource))
   }
 
-  const deserialized = []
-    .concat(json.data)
-    .map(resource => addToFlatResources(flatResources, resource))
-
-  return getFirstIfSingleItemList(deserialized)
+  if (Array.isArray(json.data)) {
+    return parseResource(flatResources, json.data)
+  } else {
+    return json.data
+      .map(resource => parseResource(flatResources, resource))
+  }
 }
