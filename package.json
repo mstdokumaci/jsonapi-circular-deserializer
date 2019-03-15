@@ -1,6 +1,6 @@
 {
   "name": "jsonapi-circular-deserializer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "memory optimized json api deserializer",
   "main": "index.js",
   "scripts": {
