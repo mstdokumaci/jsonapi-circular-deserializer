@@ -1,4 +1,4 @@
-const initializeResource = (flatResources, resource) => {
+const initializeFlatResource = (flatResources, resource) => {
   if (!flatResources[resource['type']]) {
     flatResources[resource['type']] = {}
   }
@@ -14,16 +14,16 @@ const initializeResource = (flatResources, resource) => {
 const parseRelationship = (flatResources, relationship) => {
   if (Array.isArray(relationship)) {
     return relationship
-      .map(resource => initializeResource(flatResources, resource))
+      .map(resource => initializeFlatResource(flatResources, resource))
   } else if (relationship) {
-    return initializeResource(flatResources, relationship)
+    return initializeFlatResource(flatResources, relationship)
   } else {
     return relationship
   }
 }
 
 const parseResource = (flatResources, resource) => {
-  const flatResource = initializeResource(flatResources, resource)
+  const flatResource = initializeFlatResource(flatResources, resource)
 
   if (resource.relationships) {
     for (let name in resource.relationships) {
